@@ -8,6 +8,36 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 
+class Vehicle {
+    String name;
+    int capacity;
+    double ratePerKm;
+    double fuelEfficiency;
+
+    Vehicle(String name, int capacity, double ratePerKm, double fuelEfficiency) {
+        this.name = name;
+        this.capacity = capacity;
+        this.ratePerKm = ratePerKm;
+        this.fuelEfficiency = fuelEfficiency;
+    }
+}
+class Delivery {
+    String fromCity;
+    String toCity;
+    int weight;
+    Vehicle vehicle;
+    double distance;
+    double fuelUsed;
+    double cost;
+
+    Delivery(String fromCity, String toCity, int weight, Vehicle vehicle, double distance) {
+        this.fromCity = fromCity;
+        this.toCity = toCity;
+        this.weight = weight;
+        this.vehicle = vehicle;
+        this.distance = distance;
+    }
+}
 
 public class JavaApplication12 {
     static Scanner sc = new Scanner(System.in);
