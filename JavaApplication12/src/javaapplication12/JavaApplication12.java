@@ -67,6 +67,9 @@ public class JavaApplication12 {
                 case 3:
                     addDelivery();
                 break;
+                case 4:
+                    calculateCost();
+                break;
                 default:
                     System.out.println("Invalid choice! Try again.");
             }
@@ -141,4 +144,12 @@ public class JavaApplication12 {
         System.out.println("\nDelivery added successfully!");
         displayDelivery(d);
     }
-
+     
+    static void calculateCost(Delivery d) {
+        d.fuelUsed = d.distance/ d.vehicle.fuelEfficiency;
+        double fuelCost = d.fuelUsed * FUEL_PRICE;
+        double baseCost = d.distance * d.vehicle.ratePerKm;
+        d.cost = baseCost + fuelCost;
+    }
+    
+    
