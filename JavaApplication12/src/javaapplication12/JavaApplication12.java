@@ -64,6 +64,9 @@ public class JavaApplication12 {
                 case 2: 
                     viewCities(); 
                 break;
+                case 3:
+                    addDelivery();
+                break;
                 default:
                     System.out.println("Invalid choice! Try again.");
             }
@@ -90,5 +93,39 @@ public class JavaApplication12 {
         for (int i = 0; i < cities.size(); i++) {
             System.out.println((i + 1) + ". " + cities.get(i));
         }
+    }
+     static void addDelivery() {
+        if (cities.size() < 2) {
+            System.out.println("Please add at least 2 cities first.");
+            return;
+        }
+
+        System.out.println("\nSelect source city:");
+        viewCities();
+        int src = sc.nextInt() - 1;
+
+        System.out.println("Select destination city:");
+        viewCities();
+        int dest = sc.nextInt() - 1;
+        sc.nextLine();
+
+        if (src == dest) {
+            System.out.println("Source and destination cannot be same!");
+            return;
+        }
+
+        System.out.print("Enter package weight (kg): ");
+        int weight = sc.nextInt();
+
+        System.out.println("\nSelect vehicle type:");
+        for (int i = 0; i < vehicles.length; i++) {
+            System.out.printf("%d. %s (Capacity: %dkg, Rate: %.2f LKR/km, Efficiency: %.2f km/l)\n",
+                    (i + 1), vehicles[i].name, vehicles[i].capacity,
+                    vehicles[i].ratePerKm, vehicles[i].fuelEfficiency);
+        }
+        int vChoice = sc.nextInt() - 1;
+        Vehicle v = vehicles[vChoice];
+
+        
     }
 
