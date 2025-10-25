@@ -152,4 +152,16 @@ public class JavaApplication12 {
         d.cost = baseCost + fuelCost;
     }
     
+    static void displayDelivey(Delivery d){
+        System.out.println("--------------------------------------------");
+        System.out.println("From: " + d.fromCity);
+        System.out.println("To: " + d.toCity);
+        System.out.println("Vehicle: " + d.vehicle.name);
+        System.out.println("Distance: " + d.distance + " km");
+        System.out.println("Weight: " + d.weight + " kg");
+        System.out.printf("Fuel Used: %.2f L\n", d.fuelUsed);
+        System.out.printf("Total Cost: %.2f LKR\n", d.cost);
+        System.out.println("--------------------------------------");
+    }
+    
     
