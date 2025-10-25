@@ -126,6 +126,19 @@ public class JavaApplication12 {
         int vChoice = sc.nextInt() - 1;
         Vehicle v = vehicles[vChoice];
 
-        
+        if (weight > v.capacity) {
+            System.out.println("Weight exceeds vehicle capacity!");
+            return;
+        }
+
+        System.out.print("Enter distance between cities (km): ");
+        double distance = sc.nextDouble();
+
+        Delivery d = new Delivery(cities.get(src), cities.get(dest), weight, v, distance);
+        calculateCost(d);
+        deliveries.add(d);
+
+        System.out.println("\nDelivery added successfully!");
+        displayDelivery(d);
     }
 
