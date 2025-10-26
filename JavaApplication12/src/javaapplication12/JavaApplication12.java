@@ -68,7 +68,9 @@ public class JavaApplication12 {
                     addDelivery();
                 break;
                 case 4:
-                    calculateCost();
+                    viewDeliveries();
+                break;
+                case 5:
                 break;
                 default:
                     System.out.println("Invalid choice! Try again.");
@@ -164,4 +166,13 @@ public class JavaApplication12 {
         System.out.println("--------------------------------------");
     }
     
-    
+     static void viewDeliveries() {
+        if (deliveries.isEmpty()) {
+            System.out.println("No deliveries yet.");
+            return;
+        }
+        System.out.println("\n--- All Deliveries ---");
+        for (Delivery d : deliveries) {
+            displayDelivery(d);
+        }
+    }
