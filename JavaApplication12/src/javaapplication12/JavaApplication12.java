@@ -9,12 +9,7 @@ import java.util.Scanner;*/
 package javaapplication12;
 
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.*;
 
 class Vehicle {
@@ -69,9 +64,9 @@ public class JavaApplication12 {
     static int deliveryCount = 0;
     
     static Vehicle[] vehicles = {
-        new Vehicle ("Van", 1000, 30, 12),
-        new Vehicle("Truck", 5000, 40, 6),
-        new Vehicle("Lorry", 10000, 80, 4)
+        new Vehicle ("Van", 1000, 60, 30, 12),
+        new Vehicle("Truck", 5000,60,  40, 6),
+        new Vehicle("Lorry", 10000, 60, 80, 4)
     };
 
     static final double FUEL_PRICE = 310;
@@ -85,7 +80,6 @@ public class JavaApplication12 {
             System.out.println("2. View Cities");
             System.out.println("3. Add Delivery");
             System.out.println("4. View All Deliveries");
-            System.out.println("5. Exit");
             System.out.println("5. Rename City");
             System.out.println("6. Remove City"); 
             System.out.println("7. Distance Management"); 
@@ -133,7 +127,7 @@ public class JavaApplication12 {
                 default:
                     System.out.println("Invalid choice! Try again.");
             }
-        } while (choice != 5);
+        } while (choice != 10);
     }
     
     static void addCity() {
@@ -382,11 +376,14 @@ public class JavaApplication12 {
     
      
     static void calculateCost(Delivery d) {
-        d.fuelUsed = d.distance/ d.vehicle.fuelEfficiency;
-        double fuelCost = d.fuelUsed * FUEL_PRICE;
-        double baseCost = d.distance * d.vehicle.ratePerKm;
-        d.cost = baseCost + fuelCost;
-    }
+        d.baseCost = d.distance * d.vehicle.ratePerKm * (1 + d.weight/10000.0);
+        d.fuelUsed = d.distance / d.vehicle.fuelEfficiency;
+        d.fuelCost = d.fuelUsed * FUEL_PRICE;
+        d.operationalCost = d.baseCost + d.fuelCost;
+        d.profit = d.baseCost * 0.25;
+        d.customerCharge = d.operationalCost + d.profit;
+    }d.estimatedTime = d.distance / d.vehicle.speed;
+
     
     static void displayDelivey(Delivery d){
         System.out.println("--------------------------------------------");
