@@ -14,12 +14,14 @@ import java.util.*;
 class Vehicle {
     String name;
     int capacity;
+    int speed;
     double ratePerKm;
     double fuelEfficiency;
 
-    Vehicle (String name, int capacity, double ratePerKm, double fuelEfficiency) {
+    Vehicle (String name, int capacity,int speed,  double ratePerKm, double fuelEfficiency) {
         this.name = name;
         this.capacity = capacity;
+        this.speed = speed ;
         this.ratePerKm = ratePerKm;
         this.fuelEfficiency = fuelEfficiency;
     }
@@ -31,30 +33,43 @@ class Delivery {
     Vehicle vehicle;
     double distance;
     double fuelUsed;
-    double cost;
+    double baseCost;
+    double fuelCost;
+    double operationalCost;
+    double profit;
+    double customerCharge;
+    double estimatedTime;
+    String route;
 
-    Delivery(String fromCity, String toCity, int weight, Vehicle vehicle, double distance) {
+    Delivery(String fromCity, String toCity, int weight, Vehicle vehicle, double distance , String route) {
         this.fromCity = fromCity;
         this.toCity = toCity;
         this.weight = weight;
         this.vehicle = vehicle;
         this.distance = distance;
+        this.route = route;
     }
 }
 
 public class JavaApplication12 {
     
     static Scanner sc = new Scanner(System.in);
-    static ArrayList<String> cities = new ArrayList<>();
-    static ArrayList<Delivery> deliveries = new ArrayList<>();
+    
+    static String[] cities = new String[30];
+    static int cityCount = 0;
+    static int[][] distanceMatrix = new int[30][30];
+    
+    static Delivery[] deliveries = new Delivery[50];
+    static int deliveryCount = 0;
     
     static Vehicle[] vehicles = {
-        new Vehicle("Van", 1000, 30, 12),
+        new Vehicle ("Van", 1000, 30, 12),
         new Vehicle("Truck", 5000, 40, 6),
         new Vehicle("Lorry", 10000, 80, 4)
     };
 
     static final double FUEL_PRICE = 310;
+     static final double PROFIT_MARGIN = 0.25;
 
     public static void main(String[] args) {
         int choice;
@@ -65,9 +80,16 @@ public class JavaApplication12 {
             System.out.println("3. Add Delivery");
             System.out.println("4. View All Deliveries");
             System.out.println("5. Exit");
+            System.out.println("5. Rename City");
+            System.out.println("6. Remove City"); 
+            System.out.println("7. Distance Management"); 
+            System.out.println("8. View Vehicle Information"); 
+            System.out.println("9. View Reports"); 
+            System.out.println("10. Save and Exit");
             System.out.print("Enter your choice: ");
+            
             choice = sc.nextInt();
-            sc.nextLine(); 
+            sc.nextLine();
 
             switch (choice) {
                 case 1:
