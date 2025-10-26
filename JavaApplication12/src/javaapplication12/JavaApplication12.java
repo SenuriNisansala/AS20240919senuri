@@ -110,6 +110,9 @@ public class JavaApplication12 {
                 case 6:
                     removeCity(); 
                 break;
+                case 7:
+                    distanceManagement(); 
+                break;
                 default:
                     System.out.println("Invalid choice! Try again.");
             }
@@ -203,6 +206,68 @@ public class JavaApplication12 {
         System.out.println("✓ City '" + removedCity + "' removed successfully!");
     }
     
+    static void distanceManagement() {
+        System.out.println("\n--- DISTANCE MANAGEMENT ---");
+        System.out.println("1. Add/Edit Distance Between Cities");
+        System.out.println("2. View Distance Table");
+        System.out.println("3. Back to Main Menu");
+        System.out.print("Enter your choice: ");
+        int choice = sc.nextInt();
+        sc.nextLine();
+
+        switch (choice) {
+            case 1:
+                editDistance();
+                break;
+            case 2:
+                viewDistanceTable();
+                break;
+            case 3:
+                return;
+            default:
+                System.out.println("Invalid choice!");
+        }
+    }
+
+    static void editDistance() {
+        if (cities.size() < 2) {
+            System.out.println("Need at least 2 cities to set distances!");
+            return;
+        }
+        
+        viewCities();
+        System.out.print("Enter first city number: ");
+        int city1 = sc.nextInt() - 1;
+        
+        System.out.print("Enter second city number: ");
+        int city2 = sc.nextInt() - 1;
+        sc.nextLine();
+        
+        if (city1 < 0 || city1 >= cities.size() || city2 < 0 || city2 >= cities.size()) {
+            System.out.println("Invalid city number!");
+            return;
+        }
+        
+        if (city1 == city2) {
+            System.out.println("Cannot set distance from a city to itself!");
+            return;
+        }
+        
+        System.out.print("Enter distance (km): ");
+        int dist = sc.nextInt();
+        sc.nextLine();
+        
+        if (dist < 0) {
+            System.out.println("Distance cannot be negative!");
+            return;
+        }
+        
+        distanceMatrix[city1][city2] = dist;
+        distanceMatrix[city2][city1] = dist;
+        
+        System.out.println("✓ Distance set: " + cities.get(city1) + " ↔ " + cities.get(city2) + " = " + dist + " km");
+    }
+
     static void addDelivery() {
         if (cities.size() < 2) {
             System.out.println("Please add at least 2 cities first.");
