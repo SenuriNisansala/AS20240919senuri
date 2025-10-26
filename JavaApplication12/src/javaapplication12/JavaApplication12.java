@@ -71,6 +71,7 @@ public class JavaApplication12 {
                     viewDeliveries();
                 break;
                 case 5:
+                    System.out.println("Exiting....");
                 break;
                 default:
                     System.out.println("Invalid choice! Try again.");
