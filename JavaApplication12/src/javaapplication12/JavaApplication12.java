@@ -2,11 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
-package javaapplication12;
+/*package javaapplication12;
 
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.Scanner;*/
+package javaapplication12;
 
+
+import java.util.*;
 
 class Vehicle {
     String name;
@@ -14,7 +17,7 @@ class Vehicle {
     double ratePerKm;
     double fuelEfficiency;
 
-    Vehicle(String name, int capacity, double ratePerKm, double fuelEfficiency) {
+    Vehicle (String name, int capacity, double ratePerKm, double fuelEfficiency) {
         this.name = name;
         this.capacity = capacity;
         this.ratePerKm = ratePerKm;
@@ -40,9 +43,18 @@ class Delivery {
 }
 
 public class JavaApplication12 {
+    
     static Scanner sc = new Scanner(System.in);
     static ArrayList<String> cities = new ArrayList<>();
+    static ArrayList<Delivery> deliveries = new ArrayList<>();
     
+    static Vehicle[] vehicles = {
+        new Vehicle("Van", 1000, 30, 12),
+        new Vehicle("Truck", 5000, 40, 6),
+        new Vehicle("Lorry", 10000, 80, 4)
+    };
+
+    static final double FUEL_PRICE = 310;
 
     public static void main(String[] args) {
         int choice;
