@@ -267,6 +267,49 @@ public class JavaApplication12 {
         
         System.out.println("✓ Distance set: " + cities.get(city1) + " ↔ " + cities.get(city2) + " = " + dist + " km");
     }
+    
+      static void viewDistanceTable() {
+        if (cities.isEmpty()) {
+            System.out.println("No cities available!");
+            return;
+        }
+        
+        System.out.println("\n--- DISTANCE TABLE (km) ---");
+        
+        System.out.printf("%-15s", "");
+        for (int i = 0; i < cities.size(); i++) {
+            String cityName = cities.get(i).length() > 8 ? cities.get(i).substring(0, 8) : cities.get(i);
+            System.out.printf("%-10s", cityName);
+        }
+        System.out.println();
+        
+        for (int i = 0; i < cities.size(); i++) {
+            String cityName = cities.get(i).length() > 13 ? cities.get(i).substring(0, 13) : cities.get(i);
+            System.out.printf("%-15s", cityName);
+            for (int j = 0; j < cities.size(); j++) {
+                if (i == j) {
+                    System.out.printf("%-10s", "-");
+                } else {
+                    System.out.printf("%-10d", distanceMatrix[i][j]);
+                }
+            }
+            System.out.println();
+        }
+    }
+      
+    static void viewVehicleInfo() {
+        System.out.println("\n--- VEHICLE INFORMATION ---");
+        System.out.println("Type    Capacity  Rate/km  Speed   Fuel Efficiency");
+        System.out.println("        (kg)      (LKR)    (km/h)  (km/l)");
+        System.out.println("──────────────────────────────────────────────────");
+        
+        for (int i = 0; i < vehicles.length; i++) {
+            System.out.printf("%-8s%-10d%-9.0f%-8d%-10.0f\n", 
+                vehicles[i].name, vehicles[i].capacity, vehicles[i].ratePerKm, 
+                vehicles[i].speed, vehicles[i].fuelEfficiency);
+        }
+    }
+
 
     static void addDelivery() {
         if (cities.size() < 2) {
