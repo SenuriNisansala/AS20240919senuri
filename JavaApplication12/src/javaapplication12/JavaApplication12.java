@@ -9,6 +9,12 @@ import java.util.Scanner;*/
 package javaapplication12;
 
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 class Vehicle {
@@ -113,6 +119,17 @@ public class JavaApplication12 {
                 case 7:
                     distanceManagement(); 
                 break;
+                case 8:
+                    viewVehicleInfo(); 
+                    break;
+                case 9:
+                    viewReports();
+                    break;
+                case 10:
+                    saveToFiles();
+                    System.out.println("Data saved successfully!");
+                    System.out.println("Exiting...");
+                    break;
                 default:
                     System.out.println("Invalid choice! Try again.");
             }
@@ -310,7 +327,6 @@ public class JavaApplication12 {
         }
     }
 
-
     static void addDelivery() {
         if (cities.size() < 2) {
             System.out.println("Please add at least 2 cities first.");
@@ -350,14 +366,20 @@ public class JavaApplication12 {
 
         System.out.print("Enter distance between cities (km): ");
         double distance = sc.nextDouble();
-
-        Delivery d = new Delivery(cities.get(src), cities.get(dest), weight, v, distance);
-        calculateCost(d);
-        deliveries.add(d);
-
-        System.out.println("\nDelivery added successfully!");
-        displayDelivery(d);
+        sc.nextLine();
+        
+         if (dist < 0) {
+            System.out.println("Distance cannot be negative!");
+            return;
+        }
+        
+        distanceMatrix[city1][city2] = dist;
+        distanceMatrix[city2][city1] = dist;
+        
+        System.out.println("✓ Distance set: " + cities.get(city1) + " ↔ " + cities.get(city2) + " = " + dist + " km");
     }
+    
+    
      
     static void calculateCost(Delivery d) {
         d.fuelUsed = d.distance/ d.vehicle.fuelEfficiency;
@@ -388,3 +410,204 @@ public class JavaApplication12 {
             displayDelivery(d);
         }
     }
+     
+     static void viewReports() {
+        if (deliveries.isEmpty()) {
+            System.out.println("\nNo deliveries recorded yet!");
+            return;
+        }
+        
+        System.out.println("\n---------------------------------------");
+        System.out.println("||           PERFORMANCE REPORTS               ||");
+        System.out.println("------------------------------------------");
+        
+        double totalDistance = 0;
+        double totalTime = 0;
+        double totalRevenue = 0;
+        double totalProfit = 0;
+        double longestRoute = 0;
+        double shortestRoute = Double.MAX_VALUE;
+        
+        for (Delivery d : deliveries) {
+            totalDistance += d.distance;
+            totalTime += d.estimatedTime;
+            totalRevenue += d.customerCharge;
+            totalProfit += d.profit;
+            
+            if (d.distance > longestRoute) {
+                longestRoute = d.distance;
+            }
+            if (d.distance < shortestRoute) {
+                shortestRoute = d.distance;
+            }
+        }
+        
+        double avgTime = totalTime / deliveries.size();
+        
+        System.out.println("\na) Total Deliveries Completed: " + deliveries.size());
+        System.out.printf("b) Total Distance Covered: %.2f km\n", totalDistance);
+        System.out.printf("c) Average Delivery Time: %.2f hours\n", avgTime);
+        System.out.printf("d) Total Revenue: %.2f LKR\n", totalRevenue);
+        System.out.printf("   Total Profit: %.2f LKR\n", totalProfit);
+        System.out.printf("e) Longest Route: %.2f km\n", longestRoute);
+        System.out.printf("   Shortest Route: %.2f km\n", shortestRoute);
+        
+        System.out.println("\n--- DELIVERY HISTORY ---");
+        int count = 1;
+        for (Delivery d : deliveries) {
+            System.out.printf("%d. %s → %s | %.0f km | %s | %d kg | %.2f LKR\n",
+                    count++, d.fromCity, d.toCity, d.distance, 
+                    d.vehicle.name, d.weight, d.customerCharge);
+        }
+    }
+
+    static void saveToFiles() {
+        saveRoutesToFile();
+        saveDeliveriesToFile();
+    }
+
+    static void saveRoutesToFile() {
+        try {
+            PrintWriter writer = new PrintWriter(new FileWriter("routes.txt"));
+            
+            writer.println(cities.size());
+            
+            for (String city : cities) {
+                writer.println(city);
+            }
+            
+            for (int i = 0; i < cities.size(); i++) {
+                for (int j = 0; j < cities.size(); j++) {
+                    writer.print(distanceMatrix[i][j]);
+                    if (j < cities.size() - 1) {
+                        writer.print(",");
+                    }
+                }
+                writer.println();
+            }
+            
+            writer.close();
+            System.out.println("✓ Routes saved to routes.txt");
+            
+        } catch (IOException e) {
+            System.out.println("Error saving routes.txt: " + e.getMessage());
+        }
+    }
+
+    static void saveDeliveriesToFile() {
+        try {
+            PrintWriter writer = new PrintWriter(new FileWriter("deliveries.txt"));
+            
+            writer.println(deliveries.size());
+            
+            for (Delivery d : deliveries) {
+                writer.println(d.fromCity);
+                writer.println(d.toCity);
+                writer.println(d.weight);
+                writer.println(d.vehicle.name);
+                writer.println(d.distance);
+                writer.println(d.customerCharge);
+                writer.println(d.estimatedTime);
+                writer.println(d.route);
+            }
+            
+            writer.close();
+            System.out.println("✓ Deliveries saved to deliveries.txt");
+            
+        } catch (IOException e) {
+            System.out.println("Error saving deliveries.txt: " + e.getMessage());
+        }
+    }
+
+    static void loadFromFiles() {
+        loadRoutesFromFile();
+        loadDeliveriesFromFile();
+    }
+
+    static void loadRoutesFromFile() {
+        try {
+            File file = new File("routes.txt");
+            if (!file.exists()) {
+                return;
+            }
+            
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            
+            int cityCount = Integer.parseInt(reader.readLine().trim());
+            
+            cities.clear();
+            for (int i = 0; i < cityCount; i++) {
+                cities.add(reader.readLine().trim());
+            }
+            
+            for (int i = 0; i < cityCount; i++) {
+                String line = reader.readLine();
+                String[] distances = line.split(",");
+                for (int j = 0; j < cityCount && j < distances.length; j++) {
+                    distanceMatrix[i][j] = Integer.parseInt(distances[j].trim());
+                }
+            }
+            
+            reader.close();
+            System.out.println("✓ Routes data loaded from routes.txt");
+            
+        } catch (Exception e) {
+            System.out.println("Could not load routes.txt (may not exist yet)");
+        }
+    }
+
+    static void loadDeliveriesFromFile() {
+        try {
+            File file = new File("deliveries.txt");
+            if (!file.exists()) {
+                return;
+            }
+            
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            
+            int deliveryCount = Integer.parseInt(reader.readLine().trim());
+            
+            deliveries.clear();
+            for (int i = 0; i < deliveryCount; i++) {
+                String fromCity = reader.readLine();
+                String toCity = reader.readLine();
+                int weight = Integer.parseInt(reader.readLine());
+                String vehicleName = reader.readLine();
+                double distance = Double.parseDouble(reader.readLine());
+                double customerCharge = Double.parseDouble(reader.readLine());
+                double estimatedTime = Double.parseDouble(reader.readLine());
+                String route = reader.readLine();
+                
+                Vehicle v = null;
+                for (Vehicle vehicle : vehicles) {
+                    if (vehicle.name.equals(vehicleName)) {
+                        v = vehicle;
+                        break;
+                    }
+                }
+                
+                Delivery d = new Delivery(fromCity, toCity, weight, v, distance);
+                d.customerCharge = customerCharge;
+                d.estimatedTime = estimatedTime;
+                d.route = route;
+                deliveries.add(d);
+            }
+            
+            reader.close();
+            System.out.println("✓ Delivery data loaded from deliveries.txt");
+            
+        } catch (Exception e) {
+            System.out.println("Could not load deliveries.txt (may not exist yet)");
+        }
+    }
+}
+
+class RouteResult {
+    double distance;
+    String routePath;
+    
+    RouteResult() {
+        this.distance = 0;
+        this.routePath = "";
+    }
+}
