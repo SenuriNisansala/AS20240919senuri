@@ -105,7 +105,10 @@ public class JavaApplication12 {
                     viewDeliveries();
                 break;
                 case 5:
-                    System.out.println("Exiting....");
+                    renameCity(); 
+                break;
+                case 6:
+                    removeCity(); 
                 break;
                 default:
                     System.out.println("Invalid choice! Try again.");
@@ -113,8 +116,12 @@ public class JavaApplication12 {
         } while (choice != 5);
     }
     
-    //add a city
     static void addCity() {
+        if (cities.size() >= 30) { 
+            System.out.println("Maximum city limit (30) reached!");
+            return;
+        }
+
         System.out.print("Enter city name: ");
         String name = sc.nextLine();
         if (cities.contains(name)) {
@@ -134,7 +141,69 @@ public class JavaApplication12 {
             System.out.println((i + 1) + ". " + cities.get(i));
         }
     }
-     static void addDelivery() {
+    
+    static void renameCity() {
+        if (cities.isEmpty()) {
+            System.out.println("No cities available to rename!");
+            return;
+        }
+        
+        viewCities();
+        System.out.print("Enter city number to rename: ");
+        int index = sc.nextInt() - 1;
+        sc.nextLine();
+        
+        if (index < 0 || index >= cities.size()) {
+            System.out.println("Invalid city number!");
+            return;
+        }
+        
+        System.out.print("Enter new name: ");
+        String newName = sc.nextLine();
+        
+        String oldName = cities.get(index);
+        cities.set(index, newName);
+        System.out.println("✓ City '" + oldName + "' renamed to '" + newName + "'");
+    }
+    
+    static void removeCity() {
+        if (cities.isEmpty()) {
+            System.out.println("No cities available to remove!");
+            return;
+        }
+        
+        viewCities();
+        System.out.print("Enter city number to remove: ");
+        int index = sc.nextInt() - 1;
+        sc.nextLine();
+        
+        if (index < 0 || index >= cities.size()) {
+            System.out.println("Invalid city number!");
+            return;
+        }
+        
+        String removedCity = cities.get(index);
+        cities.remove(index);
+        
+        for (int i = index; i < cities.size(); i++) {
+            for (int j = 0; j < cities.size() + 1; j++) {
+                if (i + 1 < 30) {
+                    distanceMatrix[i][j] = distanceMatrix[i + 1][j];
+                }
+            }
+        }
+        for (int i = 0; i < cities.size(); i++) {
+            for (int j = index; j < cities.size(); j++) {
+                if (j + 1 < 30) {
+                    distanceMatrix[i][j] = distanceMatrix[i][j + 1];
+                }
+            }
+        }
+        
+        System.out.println("✓ City '" + removedCity + "' removed successfully!");
+    }
+    
+    static void addDelivery() {
         if (cities.size() < 2) {
             System.out.println("Please add at least 2 cities first.");
             return;
